@@ -1,7 +1,7 @@
 const express = require('express')
 const bodyParser = require('body-parser')
 const app = express()
-const port = 1337
+const port = 2018
 
 app.use(bodyParser.json())
 
@@ -13,20 +13,21 @@ app.use((req, res, next) => {
     next()
    })
 
-let TVShowArr=[]
+let StoriesArr=[]
 
-app.get('/shows', (req, res) => res.send(TVShowArr))
+app.get('/stories', (req, res) => res.send(StoriesArr))
 
-app.post('/shows', (req, res) => {
-    TVShowArr.push(req.body)
-  res.send(TVShowArr)
+app.post('/stories', (req, res) => {
+  console.log(req.body)
+    StoriesArr.push(req.body)
+  res.send(StoriesArr)
 })
 
-app.put('/shows', (req, res) => {
+app.put('/stories', (req, res) => {
   console.log(req.body)
   res.send(`put for ${req.body.name}`)
 })
 
-app.delete('/shows', (req, res) => res.send(`delete for ${req.query.name}`))
+app.delete('/stories', (req, res) => res.send(`delete for ${req.query.name}`))
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`))
