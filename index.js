@@ -2,6 +2,9 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const app = express()
 const port = 1337
+const monk = require ('monk')
+const db = monk ('mongodb://admin:HelioTrainingTvDemo123@ds041157.mlab.com:41157/tv-demo-database')
+const TVShowsCollection = db.get('tvshows')
 
 app.use(bodyParser.json())
 
@@ -13,13 +16,26 @@ app.use((req, res, next) => {
     next()
    })
 
-let TVShowArr=[]
+// let TVShowArr=[]
 
-app.get('/shows', (req, res) => res.send(TVShowArr))
-
-app.post('/shows', (req, res) => {
-    TVShowArr.push(req.body)
+app.get('/shows', async (req, res) => {
+  try{
+  const TVShowArr = await TVShowsCollection.find({})
   res.send(TVShowArr)
+  } catch (err) {
+    console.log(err)
+    res.send(err)
+  }
+})
+
+app.post('/shows',  async(req, res) => {
+  try {
+  const saveTvShow = await TVShowsCollection.insert(req.body)
+  res.send(saveTvShow)
+  } catch (err) {
+    console.log(err)
+    res.send(err)
+  }
 })
 
 app.put('/shows', (req, res) => {
